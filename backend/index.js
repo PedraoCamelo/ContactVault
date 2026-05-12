@@ -12,7 +12,9 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Simple test route
+// Mount routes
+app.use('/contacts', require('./routes/contacts'));
+
 app.get('/', (req, res) => {
   res.json({ message: 'ContactVault backend is running' });
 });
