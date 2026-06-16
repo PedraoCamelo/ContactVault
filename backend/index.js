@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./lib/swagger');
 
 const authMiddleware = require('./middleware/auth');
 const loggerMiddleware = require('./middleware/logger');
@@ -15,6 +17,8 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use('/auth', require('./routes/auth'));
 app.use('/contacts', authMiddleware, require('./routes/contacts'));
 app.use('/logs', authMiddleware, require('./routes/logs'));
@@ -25,4 +29,5 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Backend listening on port ${PORT}`);
+  console.log(`Swagger docs at http://localhost:${PORT}/api-docs`);
 });

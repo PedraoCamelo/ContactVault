@@ -6,6 +6,47 @@ const router = express.Router();
 
 const TOKEN_TTL = 3600;
 
+/**
+ * @openapi
+ * /auth/validate:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Exchange an API key for a JWT
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [apiKey]
+ *             properties:
+ *               apiKey:
+ *                 type: string
+ *                 example: my-secret-key
+ *     responses:
+ *       200:
+ *         description: JWT token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Missing apiKey
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Invalid apiKey
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 router.post('/validate', async (req, res) => {
   const { apiKey } = req.body;
 
